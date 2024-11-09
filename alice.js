@@ -1,0 +1,53 @@
+const crypto = require("crypto");
+
+const senderPrivateKeyPem = `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCa/1ZqQnWmTToC
+C5p0hwxouAKdbNxzTzcrxufX2pj2MnPAyx7pUG2vPLBZW+cTFx5FY19NWl+Fs7hN
+gj8WDZjw06wrKjTBKwKigC+DSvBQ0cSyazprbSQ3/JKYdjkRuU1odxvDucWVRKmL
+ItjjXxIawIhPQVA+r89QottegwsZi56aQ1j8tE4syAJ/TFEPbRipIGT8vTcrg+gs
+p+fjhdVSsbsZUqwF6pxwfgy59mGwsNzeD50DvSbhxTfAZ6tio0GEVc2GsIeI86z3
+DO05QJIMN9lKN9e+gOhwPuM5o+quj9cKjUcnKfuEO73NeV4egcXvIxTJ+7Swnem+
+7/KlpOCdAgMBAAECggEACWDo3C4gS0tB9sy38FQZmp6Dvf3PywRgjLwQ3D1EYyVD
+XseLm8d7k45jB00pyrxr3vv30MjmncL1pG78nTt+ZRgRw1ze609MbgO+nD2lE+bV
+dYxKcSSd++tC/Ymtw1ZIikkmu22auID6l0opAH0Irei3dsA3eEuQCkuIZYwdWFLD
+uuIdrKypLqpeTqwrAepLnBJLEVPwbXMxNxNZsIeTLdTdgSG/CAZClvyLDJTT/Q1t
+L5hJ2wa/ESvDrQhjIDIIoNnzGiWSK8Fd72Z+rgDonIuIfAAuxJZXHXehedVVYBWu
+6mQbxfgQ8ST+srskmMUvizUrOiAiQtb5MXO3pOTbAQKBgQDYFJ0xg35S5hlNKG+2
+XmDbgkjJzm4am8i02ebcqxFbwqpNwTJe1ljc9z/ToU6RaavRgdqPBA1lo1YhoA1E
+FqKsKx3gheb405N44mizgRNUNM+Rhlh/myTqihgr68078V7lvN/UBJFirHvCYsZ7
+RfWTEfrKEH2AGKMEg0o9LairgQKBgQC3odaJKVUbb8UDtWgh1fyt2B8YBqNwRDlu
+Pw9dy+K5cpaXqVKMZtfp76Gz6Fe58s+Tcc2bCPnkbsP9DyUJfZJU7aEoCLd2BtgS
+uEPmy9xgcmYdo76hAVz6t0RiMC/i+IPdpB4XO8iZzCqCz2KnM3Up9kGaNRBOB9/H
+iquslb7zHQKBgQCtRyKjkSodOm5xxIqJOXf8r6bFRqhe6Cx0cwVCUmCyMBI4FkTZ
+bpSGZjQl9wY1cAMcGED3TS2dIvWwM1RQFMLQxCbKZTbKtYheeVmzEUA517vYnF6d
+vgFFoAYwOoEzn6UVIHhx4lPgSCdaw7EdLAX5sYJmxgCOV7NqrAo9sz6+gQKBgQCS
+frbDB8lQsRMQSVmAnNEO8zqjFTCv8I2MiRw+LNh8L5E5/qfPQICBrV1oRDQwMSgu
+LXzkcP3CoicSrFFUx+vEeyq04HdT3lPkY0IwTnRKMRmMDcSXd5nwneIdHuok/TNd
+z3799ACtyXYkk0PVtbSDvGRLnIecaKW678LTVUdXdQKBgD4O4Yj9TqYaldDGuvj0
+3pGB4qF2u1Eqwl/hDav76iKMgorYbSkj2uOSDsMM/ClRR6ad960R45kBxmJA20zV
+/d+N3Hfu0q89UUKtolXs+fnElvI15fxjUFs/iNS8sDcDL/SapL5YbqDXmjPYLefw
+mOq5Ki8Ve2GqFOTD+gYh3Is6
+-----END PRIVATE KEY-----`;
+
+const senderPrivateKey = crypto.createPrivateKey(senderPrivateKeyPem);
+
+const recipientPublicKeyPem = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxNIflj1J1qAboxgAW3nB
+7T3lveUP837DFiAer2g99u0ZzJnaogiIP7IztOPWgDHKCfa1BedCIxP3SpHiIqb8
+HUcUq1t20G1QR9ECRJ8sxk1ZunfFsEAvm/JM57aZe7UNEXePXyrYvV3EmO6ArUFQ
+JM2ms9XtRqlO4oxigJ6SFGpxeHiN0ueCGKSDomqc57le+f3+huGRHlrWNmsb4GMO
+QhrfDq4PiO2KScQcVwG1LA4qLakb4nRMJ2RXgIFsaxLmAqx0qPSWq9NfcBH/JXPV
+7Tjtqt99W2QzO4ZtfB3D6fOT26MAaotaFSvNhlpwiiWthspe3lSoKbAcVxf98Cyr
+5QIDAQAB
+-----END PUBLIC KEY-----`;
+
+const recipientPublicKey = crypto.createPublicKey(recipientPublicKeyPem);
+
+const message = "I want some apples";
+const data = Buffer.from(message);
+
+const signature = crypto.sign("sha256", data, senderPrivateKey);
+console.log("Signature:", signature.toString("hex"));
+
+const ciphertext = crypto.publicEncrypt(recipientPublicKey, data);
+console.log("Message:", ciphertext.toString("hex"));
